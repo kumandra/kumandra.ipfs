@@ -1,6 +1,8 @@
 mod utils;
 use utils::options::option;
 use utils::check_distro::check_distro;
+use utils::arch_installation::{first_option, second_options};
+use online::sync::check;
 
 fn main() {
     let mut input = String::new();
@@ -21,6 +23,7 @@ fn main() {
             // Install Arch Dependencies
             println!("Installing Arch Dependencies now: ");
             // Call function to install dependencies
+            first_option();
 
         }
         else if distro == "Debian" {
@@ -42,10 +45,38 @@ fn main() {
         println!("You choose number 2 ");
         // Todo! for join normal peers + cluster
         // Check Linux Distro (debian or arch)
-        // Install dependencies for the distro
+        let distro = check_distro();
+        if distro == "Arch" {
+            // Install Arch Dependencies
+            println!("Installing Arch Dependencies now: ");
+
+            // Call function to install dependencies
+            second_options();
+        }
+        else if distro == "Debian" {
+            // Install Debian Dependencies
+            println!("Installing Debian Dependencies now: ");
+            // Call function to install dependencies
+        }
+
+        else if distro == "Ubuntu" {
+            // Install Ubuntu Dependencies
+            println!("Installing Ubuntu Dependencies now: ");
+            // Call function to install dependencies
+        }
+        else {
+            println!("Your distro is not supported: ");
+        }
+
     }
     else {
         println!("Ops! Look like you enter the wrong number: ");
     }
-
 }
+
+
+// fn main() {
+
+//     arch_installation();
+
+// }
