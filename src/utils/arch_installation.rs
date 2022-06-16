@@ -30,6 +30,8 @@ pub fn first_option() {
         install(&not_installed)
     }
 
+    // Configuration for the IPFS node
+
     // // ipfs-cluster-bin hash
     // let hash = "https://gateway.kumandra.org/files/QmVju9rmvgdKS5ndzSrVrL3pcwn4JWtrnAQ2dUgnMnGfi3";
 
@@ -124,4 +126,69 @@ fn is_installed(app: &str) -> bool {
 
     output.status.success()
 
+}
+
+pub fn generate_ipfs_config() {
+    extern crate directories;
+    use directories::BaseDirs;
+    // download swarm key
+    let hash = "https://gateway.kumandra.org/files/QmW7TBPgLQ2wTFfz98GmMVxtA4eqkNwXZPW3rPv2wLp1sw";
+
+    if let Some(base_dirs) = BaseDirs::new() {
+        let ipfs_folder = base_dirs.home_dir().join(".ipfs").join("swarm.key");
+        Command::new("wget")
+            .arg(hash)
+            .arg("-O")
+            .arg(ipfs_folder)
+            .output()
+            .expect("failed to execute process");
+
+    } else {
+        panic!("Unable to get home directory path.")
+    }
+
+    ipfs_service_file();
+    ipfs_service_enable();
+    ipfs_service_start();
+
+
+}
+
+fn ipfs_service_file() {
+    // Check sudo
+    sudo::escalate_if_needed().unwrap();
+
+    // Download systemd service for IPFS
+    let ipfs_service_file = "https://gateway.kumandra.org/files/QmQehFfVQrmqW4PJrX12Si1HBVmtAbJwLuQLndHqSwVZTx";
+    Command::new("wget")
+        .arg(ipfs_service_file)
+        .arg("-O")
+        .arg("/etc/systemd/user/ipfs.service")
+        .output()
+        .expect("failed to execute process");
+    println!("Successfully copy ipfs.service");
+}
+
+
+
+fn ipfs_service_enable() {
+    Command::new("systemctl")
+        .arg("enable")
+        .arg("--user")
+        .arg("ipfs")
+        .output()
+        .expect("failed to execute process");
+
+    println!("IPFS servicec Successfully enabled");
+}
+
+fn ipfs_service_start() {
+    Command::new("systemctl")
+        .arg("start")
+        .arg("--user")
+        .arg("ipfs")
+        .output()
+        .expect("failed to execute process");
+
+    println!("IPFS service started");
 }
