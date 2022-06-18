@@ -192,3 +192,29 @@ fn ipfs_service_start() {
 
     println!("IPFS service started");
 }
+
+// fn cluster_service_file() {
+//     // Check sudo
+//     sudo::escalate_if_needed().unwrap();
+
+//     // Download systemd service for IPFS
+//     let cluster_service_file = "https://gateway.kumandra.org/files/";
+//     Command::new("wget")
+//         .arg(cluster_service_file)
+//         .arg("-O")
+//         .arg("/etc/systemd/user/cluster.service")
+//         .output()
+//         .expect("failed to execute process");
+//     println!("Successfully copy cluster.service");
+// }
+
+// fn cluster_service_start() {
+//     Command::new("systemctl")
+//         .arg("start")
+//         .arg("--user")
+//         .arg("cluster")
+//         .output()
+//         .expect("failed to execute process");
+
+//     println!("IPFS service started");
+// }
